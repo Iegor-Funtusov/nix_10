@@ -10,7 +10,11 @@ public class UserService {
     private final UserDao userDao = new UserDao();
 
     public void create(User user) {
-        userDao.create(user);
+        if (!userDao.existByEmail(user.getEmail())) {
+            userDao.create(user);
+        } else {
+            System.out.println("user exist by email");
+        }
     }
 
     public void update(User user) {

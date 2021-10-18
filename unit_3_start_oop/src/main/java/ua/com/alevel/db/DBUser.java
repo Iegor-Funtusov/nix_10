@@ -48,6 +48,10 @@ public class DBUser {
         return users;
     }
 
+    public boolean existByEmail(String email) {
+        return users.stream().anyMatch(user -> user.getEmail().equals(email));
+    }
+
     private String generateId() {
         String id = UUID.randomUUID().toString();
         if (users.stream().anyMatch(user -> user.getId().equals(id))) {

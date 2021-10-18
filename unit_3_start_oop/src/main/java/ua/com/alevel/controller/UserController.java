@@ -7,8 +7,13 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class UserController {
+
+    public static final Pattern VALID_EMAIL_ADDRESS_REGEX =
+            Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
 
     private final UserService userService = new UserService();
 
@@ -58,12 +63,18 @@ public class UserController {
         try {
             System.out.println("Please, enter your name");
             String name = reader.readLine();
+            System.out.println("Please, enter your email");
+            String email = reader.readLine();
+            Matcher matcher = VALID_EMAIL_ADDRESS_REGEX.matcher(email);
+            boolean emailRegex =  matcher.find();
+            System.out.println("emailRegex = " + emailRegex);
             System.out.println("Please, enter your age");
             String ageString = reader.readLine();
             int age = Integer.parseInt(ageString);
             User user = new User();
             user.setAge(age);
             user.setName(name);
+            user.setEmail(email);
             userService.create(user);
         } catch (IOException e) {
             System.out.println("problem: = " + e.getMessage());
