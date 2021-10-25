@@ -15,6 +15,7 @@
         <module>unit_3_start_oop</module>
         <module>unit_4_next_oop</module>
         <module>itersection_table</module>
+        <module>unit_5_test_logs</module>
     </modules>
     <packaging>pom</packaging>
 
