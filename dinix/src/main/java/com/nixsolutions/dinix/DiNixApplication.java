@@ -1,7 +1,5 @@
 package com.nixsolutions.dinix;
 
-import com.nixsolutions.ApplicationStarter;
-
 import java.util.Collection;
 
 public class DiNixApplication {

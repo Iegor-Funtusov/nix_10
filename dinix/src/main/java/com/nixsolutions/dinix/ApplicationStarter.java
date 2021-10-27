@@ -1,4 +1,4 @@
-package com.nixsolutions;
+package com.nixsolutions.dinix;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
