@@ -17,7 +17,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void create(User entity) {
-        System.out.println("UserServiceImpl.create");
         if (!userDao.existByEmail(entity.getEmail())) {
             userDao.create(entity);
         } else {
@@ -31,18 +30,17 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void delete(String id) {
+    public void delete(int id) {
         userDao.delete(id);
     }
 
     @Override
-    public User findById(String id) {
+    public User findById(int id) {
         return userDao.findById(id);
     }
 
     @Override
     public Collection<User> findAll() {
-        System.out.println("UserServiceImpl.findAll");
         return userDao.findAll();
     }
 }

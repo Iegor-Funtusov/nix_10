@@ -2,6 +2,7 @@ package com.nixsolutions.dinix;
 
 import com.nixsolutions.dinix.annotations.Autowired;
 import com.nixsolutions.dinix.factory.BeanFactory;
+import com.nixsolutions.dinix.factory.BeanStorage;
 
 import java.lang.reflect.Field;
 import java.util.*;
@@ -9,7 +10,7 @@ import java.util.stream.Collectors;
 
 public class ApplicationContext {
 
-    private final Map<Class<?>, Object> mapInterfaceAndImplementation = new HashMap<>();
+    private BeanStorage beanStorage;
     private Set<Class<?>> serviceInterfaces;
     private ApplicationSearcher applicationSearcher;
     private BeanFactory beanFactory;
@@ -20,7 +21,6 @@ public class ApplicationContext {
             this.applicationSearcher = new ApplicationSearcher(rootPackage.getName());
             List<Class<?>> allClasses = this.applicationSearcher.getAllClassesByPackage(rootPackage.getName(), mainClass.getClassLoader());
             initServiceInterfaces(allClasses);
-            this.beanFactory = new BeanFactory(this.applicationSearcher);
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println("e = " + e.getMessage());
@@ -31,31 +31,29 @@ public class ApplicationContext {
         this.serviceInterfaces.forEach(serviceInterface -> {
             Object impl = this.beanFactory.createBeanByInterface(serviceInterface);
             if (impl != null) {
-                mapInterfaceAndImplementation.put(serviceInterface, impl);
+                beanStorage.getBeanMap().put(serviceInterface, impl);
             }
         });
     }
 
     public Map<Class<?>, Object> getMapInterfaceAndImplementation() {
-        return mapInterfaceAndImplementation;
+        return beanStorage.getBeanMap();
     }
 
     public void configureBeanMap() {
-        mapInterfaceAndImplementation.forEach((ifc, impl) -> {
-            System.out.println("ifc = " + ifc);
-            System.out.println("impl = " + impl);
-            Field[] fields = impl.getClass().getDeclaredFields();
-            for (Field field : fields) {
-                if (field.isAnnotationPresent(Autowired.class)) {
-                    field.setAccessible(true);
-                    try {
-                        field.set(impl, mapInterfaceAndImplementation.get(field.getType()));
-                    } catch (IllegalAccessException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-        });
+        beanFactory.configureBeanMap();
+    }
+
+    public void setBeanStorage(BeanStorage beanStorage) {
+        this.beanStorage = beanStorage;
+    }
+
+    public void setBeanFactory(BeanFactory beanFactory) {
+        this.beanFactory = beanFactory;
+    }
+
+    public ApplicationSearcher getApplicationSearcher() {
+        return applicationSearcher;
     }
 
     private void initServiceInterfaces(List<Class<?>> allClasses) {

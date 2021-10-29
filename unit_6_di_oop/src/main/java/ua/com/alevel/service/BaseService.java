@@ -8,7 +8,7 @@ public interface BaseService<ENTITY extends BaseEntity> {
 
     void create(ENTITY entity);
     void update(ENTITY entity);
-    void delete(String id);
-    ENTITY findById(String id);
+    void delete(int id);
+    ENTITY findById(int id);
     Collection<ENTITY> findAll();
 }

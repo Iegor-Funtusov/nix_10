@@ -2,13 +2,13 @@ package ua.com.alevel.entity;
 
 public abstract class BaseEntity {
 
-    private String id;
+    private int id;
 
-    public String getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(int id) {
         this.id = id;
     }
 }

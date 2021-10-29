@@ -17,12 +17,12 @@ public class TestDaoImpl implements TestDao {
     }
 
     @Override
-    public void delete(String id) {
+    public void delete(int id) {
 
     }
 
     @Override
-    public Test findById(String id) {
+    public Test findById(int id) {
         return null;
     }
 

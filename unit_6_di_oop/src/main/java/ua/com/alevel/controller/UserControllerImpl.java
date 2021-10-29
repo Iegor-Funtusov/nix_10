@@ -22,7 +22,6 @@ public class UserControllerImpl implements UserController {
             Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
 
     @Autowired
-//    private BaseService<User> userService;
     private UserService userService;
 
     @Override
@@ -94,7 +93,8 @@ public class UserControllerImpl implements UserController {
         System.out.println("UserController.update");
         try {
             System.out.println("Please, enter id");
-            String id = reader.readLine();
+            String ids = reader.readLine();
+            int id = Integer.parseInt(ids);
             System.out.println("Please, enter your name");
             String name = reader.readLine();
             System.out.println("Please, enter your age");
@@ -114,7 +114,8 @@ public class UserControllerImpl implements UserController {
         System.out.println("UserController.delete");
         try {
             System.out.println("Please, enter id");
-            String id = reader.readLine();
+            String ids = reader.readLine();
+            int id = Integer.parseInt(ids);
             userService.delete(id);
         } catch (IOException e) {
             System.out.println("problem: = " + e.getMessage());
@@ -125,7 +126,8 @@ public class UserControllerImpl implements UserController {
         System.out.println("UserController.findById");
         try {
             System.out.println("Please, enter id");
-            String id = reader.readLine();
+            String ids = reader.readLine();
+            int id = Integer.parseInt(ids);
             User user = userService.findById(id);
             System.out.println("user = " + user);
         } catch (IOException e) {
