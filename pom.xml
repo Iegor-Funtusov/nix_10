@@ -18,6 +18,7 @@
         <module>unit_5_test_logs</module>
         <module>unit_6_di_oop</module>
         <module>dinix</module>
+        <module>unit_7_collections</module>
     </modules>
     <packaging>pom</packaging>
 
