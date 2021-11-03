@@ -5,7 +5,7 @@ import java.util.*;
 public class CollectionsMain {
 
     public static void main(String[] args) {
-        new Func().convert();
+        new Func().parallel();
 //        for (int i = 0; i < 100; i++) {
 //            new ListTest().test();
 //        }

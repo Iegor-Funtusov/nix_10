@@ -1,13 +1,32 @@
 package ua.com.alevel;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class Func {
+
+    public void parallel() {
+        List<Integer> integers = new ArrayList<>();
+        Random random = new Random();
+        for (int i = 0; i < 100_000_000; i++) {
+            integers.add(random.nextInt(1000));
+        }
+        long start = System.currentTimeMillis();
+        int sum = integers.stream().reduce(Integer::sum).get();
+        long end = System.currentTimeMillis() - start;
+        System.out.println("stream end = " + end);
+
+        start = System.currentTimeMillis();
+        sum = integers.stream().parallel().reduce(Integer::sum).get();
+        end = System.currentTimeMillis() - start;
+        System.out.println("stream parallel end = " + end);
+
+        start = System.currentTimeMillis();
+        sum = integers.parallelStream().reduce(Integer::sum).get();
+        end = System.currentTimeMillis() - start;
+        System.out.println("parallelStream end = " + end);
+    }
 
     private void f() {
         AnonimImpl anonimImpl = new AnonimImpl();
@@ -89,6 +108,9 @@ public class Func {
 //                .reduce(Integer::sum);
 
         List<Integer> integers = Arrays.asList(1, 2, 3);
+
+        boolean even = integers.stream().anyMatch(this::isPositive);
+
         int summ = integers.stream().reduce(Integer::sum).get();
 
         System.out.println("summ = " + summ);
