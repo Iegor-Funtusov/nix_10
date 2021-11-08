@@ -19,6 +19,8 @@
         <module>unit_6_di_oop</module>
         <module>dinix</module>
         <module>unit_7_collections</module>
+        <module>unit_9_generics_date</module>
+        <module>demo_web</module>
     </modules>
     <packaging>pom</packaging>
 
