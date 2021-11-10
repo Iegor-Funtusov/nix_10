@@ -1,0 +1,25 @@
+{
+  "data": {
+    "count": 3,
+    "items": [
+      {
+        "id": "id",
+        "firstName": "firstName",
+        "lastName": "lastName",
+        "fullName": "lastName"
+      },
+      {
+        "id": "id",
+        "firstName": "firstName",
+        "lastName": "lastName",
+        "fullName": "lastName"
+      },
+      {
+        "id": "id",
+        "firstName": "firstName",
+        "lastName": "lastName",
+        "fullName": "lastName"
+      }
+    ]
+  }
+}
