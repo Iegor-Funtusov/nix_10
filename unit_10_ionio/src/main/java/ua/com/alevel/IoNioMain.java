@@ -1,5 +1,6 @@
 package ua.com.alevel;
 
+import ua.com.alevel.data.CsvTest;
 import ua.com.alevel.data.JsonTest;
 import ua.com.alevel.serial.SerialProcess;
 
@@ -14,8 +15,10 @@ public class IoNioMain {
     private static final String DIRS = "folder/folder1/folder2/folder3";
 
     public static void main(String[] args) throws IOException, ClassNotFoundException {
-        JsonTest jsonTest = new JsonTest();
-        jsonTest.test();
+        CsvTest csvTest = new CsvTest();
+        csvTest.test();
+//        JsonTest jsonTest = new JsonTest();
+//        jsonTest.test();
 //        SerialProcess serialProcess = new SerialProcess();
 //        serialProcess.serial();
 //        serialProcess.deserial();
