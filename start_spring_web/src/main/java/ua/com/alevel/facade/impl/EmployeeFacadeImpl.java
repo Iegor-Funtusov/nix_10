@@ -32,7 +32,7 @@ public class EmployeeFacadeImpl implements EmployeeFacade {
             Employee employee = new Employee();
             employee.setDepartment(optionalDepartment.get());
             employee.setFirstName(employeeRequestDto.getFirstName());
-            employee.setLastName(employee.getLastName());
+            employee.setLastName(employeeRequestDto.getLastName());
             employee.setAge(employeeRequestDto.getAge());
             employeeService.create(employee);
         }

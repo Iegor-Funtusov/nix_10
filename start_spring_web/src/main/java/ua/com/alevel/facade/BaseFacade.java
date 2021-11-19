@@ -4,7 +4,6 @@ import ua.com.alevel.dto.RequestDto;
 import ua.com.alevel.dto.ResponseDto;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface BaseFacade<REQ extends RequestDto, RES extends ResponseDto> {
 

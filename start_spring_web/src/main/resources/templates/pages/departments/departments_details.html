@@ -41,7 +41,9 @@
                         </tr>
                     </table>
                     <hr>
-                    <button type="button" class="btn btn-primary">Show all employees</button>
+                    <a th:href="@{'/employees/departments/' + ${department.getId()}}" type="button" class="btn btn-primary">Show all employees</a>
+                    <hr>
+                    <a th:href="@{'/employees/new/' + ${department.getId()}}" type="button" class="btn btn-primary">Create new employee</a>
                 </div>
             </div>
         </div>
