@@ -17,10 +17,10 @@
         <td th:text="${publisher.getCountry()}"></td>
         <td th:text="${publisher.getBookCount()}"></td>
         <td>
-            <a th:href="@{'/publishers/details/' + ${author.getId()}}" type="button" class="btn btn-primary">details</a>
+            <a th:href="@{'/publishers/details/' + ${publisher.getId()}}" type="button" class="btn btn-primary">details</a>
         </td>
         <td>
-            <a th:href="@{'/publishers/delete/' + ${author.getId()}}" type="button" class="btn btn-danger">delete</a>
+            <a th:href="@{'/publishers/delete/' + ${publisher.getId()}}" type="button" class="btn btn-danger">delete</a>
         </td>
     </tr>
 
