@@ -8,6 +8,7 @@ import ua.com.alevel.persistence.datatable.DataTableResponse;
 import ua.com.alevel.persistence.entity.Author;
 import ua.com.alevel.service.AuthorService;
 import ua.com.alevel.util.WebRequestUtil;
+import ua.com.alevel.util.WebResponseUtil;
 import ua.com.alevel.view.dto.request.AuthorRequestDto;
 import ua.com.alevel.view.dto.request.PageAndSizeData;
 import ua.com.alevel.view.dto.request.SortData;
@@ -15,6 +16,7 @@ import ua.com.alevel.view.dto.response.AuthorResponseDto;
 import ua.com.alevel.view.dto.response.PageData;
 
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -28,7 +30,10 @@ public class AuthorFacadeImpl implements AuthorFacade {
 
     @Override
     public void create(AuthorRequestDto authorRequestDto) {
-
+        Author author = new Author();
+        author.setFirstName(authorRequestDto.getFirstName());
+        author.setLastName(authorRequestDto.getLastName());
+        authorService.create(author);
     }
 
     @Override
@@ -43,19 +48,12 @@ public class AuthorFacadeImpl implements AuthorFacade {
 
     @Override
     public AuthorResponseDto findById(Long id) {
-        return null;
+        return new AuthorResponseDto(authorService.findById(id));
     }
 
     @Override
     public PageData<AuthorResponseDto> findAll(WebRequest request) {
-        PageAndSizeData pageAndSizeData = WebRequestUtil.generatePageAndSizeData(request);
-        SortData sortData = WebRequestUtil.generateSortData(request);
-        DataTableRequest dataTableRequest = new DataTableRequest();
-        dataTableRequest.setPageSize(pageAndSizeData.getSize());
-        dataTableRequest.setCurrentPage(pageAndSizeData.getPage());
-        dataTableRequest.setSort(sortData.getSort());
-        dataTableRequest.setOrder(sortData.getOrder());
-
+        DataTableRequest dataTableRequest = WebRequestUtil.initDataTableRequest(request);
         DataTableResponse<Author> tableResponse = authorService.findAll(dataTableRequest);
 
         List<AuthorResponseDto> authors = tableResponse.getItems().stream().
@@ -64,15 +62,14 @@ public class AuthorFacadeImpl implements AuthorFacade {
                         getOtherParamMap().get(authorResponseDto.getId()))).
                 collect(Collectors.toList());
 
-        PageData<AuthorResponseDto> pageData = new PageData<>();
+        PageData<AuthorResponseDto> pageData = (PageData<AuthorResponseDto>) WebResponseUtil.initPageData(tableResponse);
         pageData.setItems(authors);
-        pageData.setCurrentPage(pageAndSizeData.getPage());
-        pageData.setPageSize(pageAndSizeData.getSize());
-        pageData.setOrder(sortData.getOrder());
-        pageData.setSort(sortData.getSort());
-        pageData.setItemsSize(tableResponse.getItemsSize());
-        pageData.initPaginationState(pageData.getCurrentPage());
 
         return pageData;
+    }
+
+    @Override
+    public Map<Long, String> findAllByBookId(Long bookId) {
+        return authorService.findAllByBookId(bookId);
     }
 }

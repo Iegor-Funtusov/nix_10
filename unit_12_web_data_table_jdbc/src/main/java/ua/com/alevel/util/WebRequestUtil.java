@@ -2,6 +2,7 @@ package ua.com.alevel.util;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.context.request.WebRequest;
+import ua.com.alevel.persistence.datatable.DataTableRequest;
 import ua.com.alevel.view.dto.request.PageAndSizeData;
 import ua.com.alevel.view.dto.request.SortData;
 
@@ -19,6 +20,17 @@ public final class WebRequestUtil {
     public static final int DEFAULT_SIZE_PARAM_VALUE = 10;
 
     private WebRequestUtil() { }
+
+    public static DataTableRequest initDataTableRequest(WebRequest request) {
+        DataTableRequest dataTableRequest = new DataTableRequest();
+        PageAndSizeData pageAndSizeData = generatePageAndSizeData(request);
+        SortData sortData = generateSortData(request);
+        dataTableRequest.setPageSize(pageAndSizeData.getSize());
+        dataTableRequest.setCurrentPage(pageAndSizeData.getPage());
+        dataTableRequest.setSort(sortData.getSort());
+        dataTableRequest.setOrder(sortData.getOrder());
+        return dataTableRequest;
+    }
 
     public static PageAndSizeData generatePageAndSizeData(WebRequest webRequest) {
         int page = webRequest.getParameter(PAGE_PARAM) != null ? Integer.parseInt(Objects.requireNonNull(webRequest.getParameter(PAGE_PARAM))) : DEFAULT_PAGE_PARAM_VALUE;

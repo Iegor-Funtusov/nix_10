@@ -6,6 +6,9 @@ import ua.com.alevel.persistence.datatable.DataTableRequest;
 import ua.com.alevel.persistence.datatable.DataTableResponse;
 import ua.com.alevel.persistence.entity.Publisher;
 import ua.com.alevel.service.PublisherService;
+import ua.com.alevel.util.WebResponseUtil;
+
+import java.util.Map;
 
 @Service
 public class PublisherServiceImpl implements PublisherService {
@@ -38,6 +41,14 @@ public class PublisherServiceImpl implements PublisherService {
 
     @Override
     public DataTableResponse<Publisher> findAll(DataTableRequest request) {
-        return null;
+        DataTableResponse<Publisher> dataTableResponse = publisherDao.findAll(request);
+        long count = publisherDao.count();
+        WebResponseUtil.initDataTableResponse(request, dataTableResponse, count);
+        return dataTableResponse;
+    }
+
+    @Override
+    public Map<Long, String> findAllByBookId(Long bookId) {
+        return publisherDao.findAllByBookId(bookId);
     }
 }

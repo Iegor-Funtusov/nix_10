@@ -2,4 +2,9 @@ package ua.com.alevel.service;
 
 import ua.com.alevel.persistence.entity.Publisher;
 
-public interface PublisherService extends BaseService<Publisher> { }
+import java.util.Map;
+
+public interface PublisherService extends BaseService<Publisher> {
+
+    Map<Long, String> findAllByBookId(Long bookId);
+}

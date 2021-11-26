@@ -11,7 +11,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class BookDaoImpl implements BookDao {
@@ -19,6 +21,8 @@ public class BookDaoImpl implements BookDao {
     private final JpaConfig jpaConfig;
 
     private static final String FIND_ALL_BOOKS_QUERY = "select * from books";
+    private static final String FIND_BOOK_BY_ID_QUERY = "select * from books where id = ";
+    private static final String FIND_ALL_BOOKS_BY_AUTHOR_ID_QUERY = "select id, book_name from books left join author_book ab on books.id = ab.book_id where ab.author_id = ";
 
     public BookDaoImpl(JpaConfig jpaConfig) {
         this.jpaConfig = jpaConfig;
@@ -46,6 +50,13 @@ public class BookDaoImpl implements BookDao {
 
     @Override
     public Book findById(Long id) {
+        try(ResultSet resultSet = jpaConfig.getStatement().executeQuery(FIND_BOOK_BY_ID_QUERY + id)) {
+            while (resultSet.next()) {
+                return initBookByResultSet(resultSet);
+            }
+        } catch (SQLException e) {
+            System.out.println("problem: = " + e.getMessage());
+        }
         return null;
     }
 
@@ -92,5 +103,20 @@ public class BookDaoImpl implements BookDao {
         book.setPublicationDate(publicationDate);
 
         return book;
+    }
+
+    @Override
+    public Map<Long, String> findByAuthorId(Long authorId) {
+        Map<Long, String> map = new HashMap<>();
+        try(ResultSet resultSet = jpaConfig.getStatement().executeQuery(FIND_ALL_BOOKS_BY_AUTHOR_ID_QUERY + authorId)) {
+            while (resultSet.next()) {
+                long id = resultSet.getLong("id");
+                String bookName = resultSet.getString("book_name");
+                map.put(id, bookName);
+            }
+        } catch (SQLException e) {
+            System.out.println("problem: = " + e.getMessage());
+        }
+        return map;
     }
 }

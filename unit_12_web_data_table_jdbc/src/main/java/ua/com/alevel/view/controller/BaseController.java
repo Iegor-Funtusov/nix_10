@@ -1,7 +1,15 @@
 package ua.com.alevel.view.controller;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.ui.Model;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import ua.com.alevel.view.dto.response.PageData;
+import ua.com.alevel.view.dto.response.ResponseDto;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static ua.com.alevel.util.WebRequestUtil.DEFAULT_ORDER_PARAM_VALUE;
 
 public abstract class BaseController {
 
@@ -136,5 +144,32 @@ public abstract class BaseController {
                     ", order='" + order + '\'' +
                     '}';
         }
+    }
+
+    protected void initDataTable(
+            PageData<? extends ResponseDto> response,
+            HeaderName[] columnNames,
+            Model model) {
+        List<HeaderData> headerDataList = new ArrayList<>();
+        for (HeaderName headerName : columnNames) {
+            HeaderData data = new HeaderData();
+            data.setHeaderName(headerName.getColumnName());
+            if (StringUtils.isBlank(headerName.getTableName())) {
+                data.setSortable(false);
+            } else {
+                data.setSortable(true);
+                data.setSort(headerName.getDbName());
+                if (response.getSort().equals(headerName.getDbName())) {
+                    data.setActive(true);
+                    data.setOrder(response.getOrder());
+                } else {
+                    data.setActive(false);
+                    data.setOrder(DEFAULT_ORDER_PARAM_VALUE);
+                }
+            }
+            headerDataList.add(data);
+        }
+        model.addAttribute("headerDataList", headerDataList);
+        model.addAttribute("pageData", response);
     }
 }

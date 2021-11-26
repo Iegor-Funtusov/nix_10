@@ -7,6 +7,8 @@ import ua.com.alevel.persistence.datatable.DataTableResponse;
 import ua.com.alevel.persistence.entity.Book;
 import ua.com.alevel.service.BookService;
 
+import java.util.Map;
+
 @Service
 public class BookServiceImpl implements BookService {
 
@@ -33,11 +35,16 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public Book findById(Long id) {
-        return null;
+        return bookDao.findById(id);
     }
 
     @Override
     public DataTableResponse<Book> findAll(DataTableRequest request) {
         return bookDao.findAll(request);
+    }
+
+    @Override
+    public Map<Long, String> findByAuthorId(Long id) {
+        return bookDao.findByAuthorId(id);
     }
 }

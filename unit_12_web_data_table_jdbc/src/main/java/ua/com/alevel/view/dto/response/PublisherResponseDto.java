@@ -7,6 +7,7 @@ public class PublisherResponseDto extends ResponseDto {
 
     private String name;
     private CountryCode country;
+    private Integer bookCount;
 
     public PublisherResponseDto() { }
 
@@ -33,5 +34,13 @@ public class PublisherResponseDto extends ResponseDto {
 
     public void setCountry(CountryCode country) {
         this.country = country;
+    }
+
+    public Integer getBookCount() {
+        return bookCount;
+    }
+
+    public void setBookCount(Integer bookCount) {
+        this.bookCount = bookCount;
     }
 }

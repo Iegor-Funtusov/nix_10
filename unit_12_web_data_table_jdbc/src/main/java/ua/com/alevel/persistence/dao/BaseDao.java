@@ -4,9 +4,6 @@ import ua.com.alevel.persistence.datatable.DataTableRequest;
 import ua.com.alevel.persistence.datatable.DataTableResponse;
 import ua.com.alevel.persistence.entity.BaseEntity;
 
-//http://local:8080/users?page=2&size=25&sort=created,updated&order=desc
-
-
 public interface BaseDao<ENTITY extends BaseEntity> {
 
     void create(ENTITY entity);

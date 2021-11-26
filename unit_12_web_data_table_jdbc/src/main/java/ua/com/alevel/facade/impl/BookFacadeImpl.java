@@ -15,6 +15,7 @@ import ua.com.alevel.view.dto.response.BookResponseDto;
 import ua.com.alevel.view.dto.response.PageData;
 
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -43,7 +44,7 @@ public class BookFacadeImpl implements BookFacade {
 
     @Override
     public BookResponseDto findById(Long id) {
-        return null;
+        return new BookResponseDto(bookService.findById(id));
     }
 
     @Override
@@ -64,5 +65,10 @@ public class BookFacadeImpl implements BookFacade {
         pageData.setItems(items);
 
         return pageData;
+    }
+
+    @Override
+    public Map<Long, String> findByAuthorId(Long id) {
+        return bookService.findByAuthorId(id);
     }
 }
