@@ -6,6 +6,7 @@ import ua.com.alevel.persistence.datatable.DataTableRequest;
 import ua.com.alevel.persistence.datatable.DataTableResponse;
 import ua.com.alevel.persistence.entity.Book;
 import ua.com.alevel.service.BookService;
+import ua.com.alevel.util.WebResponseUtil;
 
 import java.util.Map;
 
@@ -40,7 +41,10 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public DataTableResponse<Book> findAll(DataTableRequest request) {
-        return bookDao.findAll(request);
+        DataTableResponse<Book> dataTableResponse = bookDao.findAll(request);
+        long count = bookDao.count();
+        WebResponseUtil.initDataTableResponse(request, dataTableResponse, count);
+        return dataTableResponse;
     }
 
     @Override

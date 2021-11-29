@@ -1,7 +1,5 @@
 package ua.com.alevel.view.controller;
 
-import org.apache.commons.collections4.MapUtils;
-
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
@@ -14,8 +12,6 @@ import ua.com.alevel.facade.BookFacade;
 import ua.com.alevel.view.dto.request.AuthorRequestDto;
 import ua.com.alevel.view.dto.response.AuthorResponseDto;
 import ua.com.alevel.view.dto.response.PageData;
-
-import java.util.Map;
 
 @Controller
 @RequestMapping("/authors")
@@ -49,11 +45,7 @@ public class AuthorController extends BaseController {
 
     @PostMapping("/all")
     public ModelAndView findAllRedirect(WebRequest request, ModelMap model) {
-        Map<String, String[]> parameterMap = request.getParameterMap();
-        if (MapUtils.isNotEmpty(parameterMap)) {
-            parameterMap.forEach(model::addAttribute);
-        }
-        return new ModelAndView("redirect:/authors", model);
+        return findAllRedirect(request, model, "authors");
     }
 
     @GetMapping("/new")
@@ -64,7 +56,6 @@ public class AuthorController extends BaseController {
 
     @PostMapping("/create")
     public String create(@ModelAttribute("author") AuthorRequestDto dto) {
-        System.out.println("dto = " + dto);
         authorFacade.create(dto);
         return "redirect:/authors";
     }

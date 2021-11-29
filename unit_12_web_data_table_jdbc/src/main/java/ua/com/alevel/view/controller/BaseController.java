@@ -1,13 +1,18 @@
 package ua.com.alevel.view.controller;
 
+import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import ua.com.alevel.view.dto.response.PageData;
 import ua.com.alevel.view.dto.response.ResponseDto;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import static ua.com.alevel.util.WebRequestUtil.DEFAULT_ORDER_PARAM_VALUE;
 
@@ -171,5 +176,13 @@ public abstract class BaseController {
         }
         model.addAttribute("headerDataList", headerDataList);
         model.addAttribute("pageData", response);
+    }
+
+    public ModelAndView findAllRedirect(WebRequest request, ModelMap model, String redirectUrl) {
+        Map<String, String[]> parameterMap = request.getParameterMap();
+        if (MapUtils.isNotEmpty(parameterMap)) {
+            parameterMap.forEach(model::addAttribute);
+        }
+        return new ModelAndView("redirect:/" + redirectUrl, model);
     }
 }

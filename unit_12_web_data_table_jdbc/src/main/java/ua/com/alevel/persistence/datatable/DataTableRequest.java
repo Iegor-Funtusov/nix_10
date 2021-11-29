@@ -1,11 +1,19 @@
 package ua.com.alevel.persistence.datatable;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class DataTableRequest {
 
     private String sort;
     private String order;
     private int currentPage;
     private int pageSize;
+    private Map<String, Object> queryParam;
+
+    public DataTableRequest() {
+        queryParam = new HashMap<>();
+    }
 
     public String getSort() {
         return sort;
@@ -37,5 +45,13 @@ public class DataTableRequest {
 
     public void setPageSize(int pageSize) {
         this.pageSize = pageSize;
+    }
+
+    public Map<String, Object> getQueryParam() {
+        return queryParam;
+    }
+
+    public void setQueryParam(Map<String, Object> queryParam) {
+        this.queryParam = queryParam;
     }
 }

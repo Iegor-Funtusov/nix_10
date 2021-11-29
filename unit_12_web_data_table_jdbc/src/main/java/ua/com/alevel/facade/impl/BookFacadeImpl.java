@@ -1,5 +1,6 @@
 package ua.com.alevel.facade.impl;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.request.WebRequest;
 import ua.com.alevel.facade.BookFacade;
@@ -8,9 +9,8 @@ import ua.com.alevel.persistence.datatable.DataTableResponse;
 import ua.com.alevel.persistence.entity.Book;
 import ua.com.alevel.service.BookService;
 import ua.com.alevel.util.WebRequestUtil;
+import ua.com.alevel.util.WebResponseUtil;
 import ua.com.alevel.view.dto.request.BookRequestDto;
-import ua.com.alevel.view.dto.request.PageAndSizeData;
-import ua.com.alevel.view.dto.request.SortData;
 import ua.com.alevel.view.dto.response.BookResponseDto;
 import ua.com.alevel.view.dto.response.PageData;
 
@@ -49,21 +49,18 @@ public class BookFacadeImpl implements BookFacade {
 
     @Override
     public PageData<BookResponseDto> findAll(WebRequest request) {
-        PageAndSizeData pageAndSizeData = WebRequestUtil.generatePageAndSizeData(request);
-        SortData sortData = WebRequestUtil.generateSortData(request);
+        DataTableRequest dataTableRequest = WebRequestUtil.initDataTableRequest(request);
+        String authorId = request.getParameter("authorId");
+        if (StringUtils.isNotBlank(authorId)) {
+            dataTableRequest.getQueryParam().put("authorId", authorId);
+        }
+        DataTableResponse<Book> tableResponse = bookService.findAll(dataTableRequest);
+        List<BookResponseDto> books = tableResponse.getItems().stream().
+                map(BookResponseDto::new).
+                collect(Collectors.toList());
 
-        DataTableRequest dataTableRequest = new DataTableRequest();
-        dataTableRequest.setOrder(sortData.getOrder());
-        dataTableRequest.setSort(sortData.getSort());
-        dataTableRequest.setCurrentPage(pageAndSizeData.getPage());
-        dataTableRequest.setPageSize(dataTableRequest.getPageSize());
-
-        DataTableResponse<Book> dataTableResponse = bookService.findAll(dataTableRequest);
-
-        PageData<BookResponseDto> pageData = new PageData<>();
-        List<BookResponseDto> items = dataTableResponse.getItems().stream().map(BookResponseDto::new).collect(Collectors.toList());
-        pageData.setItems(items);
-
+        PageData<BookResponseDto> pageData = (PageData<BookResponseDto>) WebResponseUtil.initPageData(tableResponse);
+        pageData.setItems(books);
         return pageData;
     }
 

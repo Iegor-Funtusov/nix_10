@@ -22,7 +22,8 @@ public class BookDaoImpl implements BookDao {
 
     private static final String FIND_ALL_BOOKS_QUERY = "select * from books";
     private static final String FIND_BOOK_BY_ID_QUERY = "select * from books where id = ";
-    private static final String FIND_ALL_BOOKS_BY_AUTHOR_ID_QUERY = "select id, book_name from books left join author_book ab on books.id = ab.book_id where ab.author_id = ";
+    private static final String FIND_ALL_SIMPLE_BOOKS_BY_AUTHOR_ID_QUERY = "select id, book_name from books left join author_book ab on books.id = ab.book_id where ab.author_id = ";
+    private static final String FIND_ALL_BOOKS_BY_AUTHOR_ID_QUERY = "select * from books left join author_book ab on books.id = ab.book_id where ab.author_id = ";
 
     public BookDaoImpl(JpaConfig jpaConfig) {
         this.jpaConfig = jpaConfig;
@@ -108,7 +109,7 @@ public class BookDaoImpl implements BookDao {
     @Override
     public Map<Long, String> findByAuthorId(Long authorId) {
         Map<Long, String> map = new HashMap<>();
-        try(ResultSet resultSet = jpaConfig.getStatement().executeQuery(FIND_ALL_BOOKS_BY_AUTHOR_ID_QUERY + authorId)) {
+        try(ResultSet resultSet = jpaConfig.getStatement().executeQuery(FIND_ALL_SIMPLE_BOOKS_BY_AUTHOR_ID_QUERY + authorId)) {
             while (resultSet.next()) {
                 long id = resultSet.getLong("id");
                 String bookName = resultSet.getString("book_name");
@@ -118,5 +119,43 @@ public class BookDaoImpl implements BookDao {
             System.out.println("problem: = " + e.getMessage());
         }
         return map;
+    }
+
+    @Override
+    public List<Book> findAllByAuthorId(Long id) {
+        List<Book> books = new ArrayList<>();
+        try(ResultSet resultSet = jpaConfig.getStatement().executeQuery(FIND_ALL_BOOKS_BY_AUTHOR_ID_QUERY + id)) {
+            while (resultSet.next()) {
+                books.add(initBookByResultSet(resultSet));
+            }
+        } catch (SQLException e) {
+            System.out.println("problem: = " + e.getMessage());
+        }
+        return books;
+    }
+
+    private static class BookResultSet {
+
+        private final Book book;
+        private final int publisherCount;
+        private final int authorCount;
+
+        public BookResultSet(Book book, int publisherCount, int authorCount) {
+            this.book = book;
+            this.publisherCount = publisherCount;
+            this.authorCount = authorCount;
+        }
+
+        public Book getBook() {
+            return book;
+        }
+
+        public int getPublisherCount() {
+            return publisherCount;
+        }
+
+        public int getAuthorCount() {
+            return authorCount;
+        }
     }
 }
