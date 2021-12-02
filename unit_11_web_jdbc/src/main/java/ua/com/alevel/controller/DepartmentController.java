@@ -2,14 +2,19 @@ package ua.com.alevel.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ua.com.alevel.dto.department.DepartmentRequestDto;
 import ua.com.alevel.dto.department.DepartmentResponseDto;
 import ua.com.alevel.facade.DepartmentFacade;
 import ua.com.alevel.type.DepartmentType;
 
+import javax.validation.Valid;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
+@Validated
 @Controller
 @RequestMapping("/departments")
 public class DepartmentController {
@@ -47,7 +52,8 @@ public class DepartmentController {
     }
 
     @GetMapping("/details/{id}")
-    public String details(@PathVariable Long id, Model model) {
+    public String details(@PathVariable @Valid @Min(value = 1, message = "idiot!!!") @NotNull(message = "double idiot!!!") Long id, Model model) {
+        System.out.println("DepartmentController.details");
         DepartmentResponseDto dto = departmentFacade.findById(id);
         model.addAttribute("department", dto);
         return "pages/departments/departments_details";

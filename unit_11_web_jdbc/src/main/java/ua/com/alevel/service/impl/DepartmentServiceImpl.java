@@ -1,6 +1,7 @@
 package ua.com.alevel.service.impl;
 
 import org.springframework.stereotype.Service;
+import ua.com.alevel.config.EntityNotFoundException;
 import ua.com.alevel.dao.DepartmentDao;
 import ua.com.alevel.dao.EmployeeDao;
 import ua.com.alevel.entity.Department;
@@ -41,7 +42,11 @@ public class DepartmentServiceImpl implements DepartmentService {
 
     @Override
     public Department findById(Long id) {
-        return departmentDao.findById(id);
+        Department byId = departmentDao.findById(id);
+        if (byId == null) {
+            throw new EntityNotFoundException("not found, please ...");
+        }
+        return byId;
     }
 
     @Override

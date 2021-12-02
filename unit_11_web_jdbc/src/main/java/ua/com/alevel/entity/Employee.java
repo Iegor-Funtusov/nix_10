@@ -5,6 +5,8 @@ public class Employee extends BaseEntity {
     private String firstName;
     private String lastName;
     private Integer age;
+    private Integer widht;
+    private Integer weight;
     private Department department;
 
     public Employee() {

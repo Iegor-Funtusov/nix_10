@@ -6,6 +6,8 @@ public class Department extends BaseEntity {
 
     private DepartmentType departmentType;
     private String name;
+    private String name1;
+    private String name2;
 
     public Department() {
         super();
