@@ -1,6 +1,9 @@
 package ua.com.alevel.service.impl;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import ua.com.alevel.persistence.crud.CrudRepositoryHelper;
 import ua.com.alevel.persistence.datatable.DataTableRequest;
 import ua.com.alevel.persistence.datatable.DataTableResponse;
@@ -24,6 +27,7 @@ public class DepartmentServiceImpl implements DepartmentService {
     }
 
     @Override
+    @Transactional(isolation = Isolation.REPEATABLE_READ)
     public void create(Department entity) {
         crudRepositoryHelper.create(departmentRepository, entity);
     }
@@ -44,7 +48,18 @@ public class DepartmentServiceImpl implements DepartmentService {
     }
 
     @Override
+    @Transactional()
     public DataTableResponse<Department> findAll(DataTableRequest request) {
         return crudRepositoryHelper.findAll(departmentRepository, request);
+    }
+
+    @Override
+//    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    public void help() {
+        System.out.println("DepartmentServiceImpl.help");
+        crudRepositoryHelper.help();
+        crudRepositoryHelper.help();
+        crudRepositoryHelper.help();
+        crudRepositoryHelper.help();
     }
 }

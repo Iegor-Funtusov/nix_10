@@ -37,7 +37,10 @@ public class DepartmentDaoImpl implements DepartmentDao {
     @Override
     public void update(Department entity) {
         Session session = sessionFactory.getCurrentSession();
+//        session.getTransaction().begin();
         session.merge(entity);
+//        session.getTransaction().commit();
+//        session.getTransaction().rollback();
     }
 
     @Override

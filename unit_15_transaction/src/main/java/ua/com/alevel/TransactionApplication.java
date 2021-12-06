@@ -1,12 +1,16 @@
 package ua.com.alevel;
 
+import org.apache.commons.collections4.MapUtils;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
 
+import ua.com.alevel.persistence.DepartmentFullTypeOverview;
+import ua.com.alevel.persistence.DepartmentTypeOverview;
 import ua.com.alevel.persistence.datatable.DataTableRequest;
 import ua.com.alevel.persistence.datatable.DataTableResponse;
+import ua.com.alevel.persistence.entity.BaseEntity;
 import ua.com.alevel.persistence.entity.Department;
 import ua.com.alevel.persistence.entity.Employee;
 import ua.com.alevel.persistence.repository.DepartmentRepository;
@@ -14,6 +18,7 @@ import ua.com.alevel.persistence.type.DepartmentType;
 import ua.com.alevel.service.DepartmentService;
 import ua.com.alevel.service.EmployeeService;
 
+import java.lang.reflect.Field;
 import java.util.*;
 
 @SpringBootApplication
@@ -43,33 +48,53 @@ public class TransactionApplication {
 //        deAttachDepartmentToEmployee();
 //        find();
         testSelected();
+//        propagation();
+    }
+
+    private void propagation() {
+        departmentService.help();
     }
 
     private void testSelected() {
-        List<Department> departments = departmentRepository.findByDepartmentTypeOrderByIdDesc(DepartmentType.JAVA);
-        System.out.println("departments = " + departments.size());
-        departments = departmentRepository.findByDepartmentTypeInOrderByIdDesc(Arrays.asList(DepartmentType.DEV_OPS, DepartmentType.KOTLIN));
-        System.out.println("departments = " + departments.size());
-        departments = departmentRepository.findByDepartmentTypeInAndNameEndingWithIgnoreCase(Arrays.asList(DepartmentType.DEV_OPS, DepartmentType.KOTLIN), "1");
-        System.out.println("departments = " + departments.size());
-        for (Department department : departments) {
-            System.out.println("department = " + department.getName());
+//        List<Department> departments = departmentRepository.findByDepartmentTypeOrderByIdDesc(DepartmentType.JAVA);
+//        System.out.println("departments = " + departments.size());
+//        departments = departmentRepository.findByDepartmentTypeInOrderByIdDesc(Arrays.asList(DepartmentType.DEV_OPS, DepartmentType.KOTLIN));
+//        System.out.println("departments = " + departments.size());
+//        departments = departmentRepository.findByDepartmentTypeInAndNameEndingWithIgnoreCase(Arrays.asList(DepartmentType.DEV_OPS, DepartmentType.KOTLIN), "1");
+//        System.out.println("departments = " + departments.size());
+//        for (Department department : departments) {
+//            System.out.println("department = " + department.getName());
+//        }
+//        Employee employee = employeeService.findById(2L).get();
+//        System.out.println("employee = " + employee.getId());
+//        Set<Employee> employees = new HashSet<>();
+//        employees.add(employee);
+//        departments = departmentRepository.findByEmployees(employees);
+//        System.out.println("departments = " + departments.size());
+//        for (Department department : departments) {
+//            System.out.println("department = " + department.getName());
+//        }
+//        System.out.println();
+//        departments = departmentRepository.findByEmployeesIds(Arrays.asList(1L,2L,10L));
+//        System.out.println("departments = " + departments.size());
+//        for (Department department : departments) {
+//            System.out.println("department = " + department.getName());
+//        }
+
+        Set<DepartmentTypeOverview> departmentTypeOverviews = departmentRepository.findDepartmentTypeOverview();
+        for (DepartmentTypeOverview departmentTypeOverview : departmentTypeOverviews) {
+            System.out.println("departmentTypeOverview = " + departmentTypeOverview);
         }
-        Employee employee = employeeService.findById(2L).get();
-        System.out.println("employee = " + employee.getId());
-        Set<Employee> employees = new HashSet<>();
-        employees.add(employee);
-        departments = departmentRepository.findByEmployees(employees);
-        System.out.println("departments = " + departments.size());
-        for (Department department : departments) {
-            System.out.println("department = " + department.getName());
-        }
+
         System.out.println();
-        departments = departmentRepository.findByEmployeesIds(Arrays.asList(1L,2L,10L));
-        System.out.println("departments = " + departments.size());
-        for (Department department : departments) {
-            System.out.println("department = " + department.getName());
+        Set<DepartmentFullTypeOverview> departmentFullTypeOverviews = departmentRepository.findDepartmentFullTypeOverview();
+        for (DepartmentFullTypeOverview departmentFullTypeOverview : departmentFullTypeOverviews) {
+            System.out.println("departmentFullTypeOverview = " + departmentFullTypeOverview);
         }
+//        if (departmentFullTypeOverviews.isPresent()) {
+//            System.out.println("departmentFullTypeOverviews = " + departmentFullTypeOverviews);
+//        }
+
     }
 
     private void createDepartment() {
@@ -167,5 +192,41 @@ public class TransactionApplication {
         System.out.println("departments = " + departments);
         System.out.println();
         System.out.println("employees = " + employees);
+    }
+
+    public void createQuery(Class<? extends BaseEntity> entityClass, DataTableRequest request) {
+        StringBuilder query = new StringBuilder();
+        query.append("select e from ").append(entityClass.getSimpleName());
+
+        Map<String, String[]> map = request.getRequestParamMap();
+        if (MapUtils.isNotEmpty(map)) {
+            query.append(" where ");
+        }
+        for (Field declaredField : entityClass.getDeclaredFields()) {
+            String[] req = map.get(declaredField.getName());
+            if (req != null) {
+                if (declaredField.getType().isAssignableFrom(String.class)) {
+                    query.append("e.");
+                    query.append(declaredField.getName());
+                    query.append(" like %");
+                    query.append(req[0]);
+                    query.append("%");
+                }
+                if (declaredField.getType().isAssignableFrom(Number.class)) {
+                    query.append("e.");
+                    query.append(declaredField.getName());
+                    query.append(" = ");
+                    query.append(req[0]);
+                }
+                if (declaredField.getType().isAssignableFrom(Enum.class)) {
+                    query.append("e.");
+                    query.append(declaredField.getName());
+                    query.append(" in (");
+                    query.append(req.toString());
+                    query.append(")");
+                }
+            }
+        }
+
     }
 }

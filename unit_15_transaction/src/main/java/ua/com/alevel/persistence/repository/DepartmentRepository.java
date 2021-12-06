@@ -5,6 +5,8 @@ package ua.com.alevel.persistence.repository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import ua.com.alevel.persistence.DepartmentFullTypeOverview;
+import ua.com.alevel.persistence.DepartmentTypeOverview;
 import ua.com.alevel.persistence.entity.Department;
 import ua.com.alevel.persistence.entity.Employee;
 import ua.com.alevel.persistence.type.DepartmentType;
@@ -34,6 +36,17 @@ public interface DepartmentRepository extends BaseRepository<Department> {
     List<Department> findByEmployeesIds(@Param("employeesIds") List<Long> employeesIds);
 
     @Query(value = "select d from Department as d join d.employees as de where de in :employees")
+//    @Query("select d from Department d where d.employees = :employees")
     List<Department> findByEmployees(@Param("employees") Set<Employee> employees);
 
+    @Query("select new ua.com.alevel.persistence.DepartmentTypeOverview(d.departmentType, count (d.departmentType)) from Department d group by d.departmentType")
+    Set<DepartmentTypeOverview> findDepartmentTypeOverview();
+
+    @Query("select new ua.com.alevel.persistence.DepartmentFullTypeOverview(" +
+            "(select count(d) from Department d where d.departmentType = 'JS')," +
+            "(select count(d) from Department d where d.departmentType = 'JAVA')," +
+            "(select count(d) from Department d where d.departmentType = 'KOTLIN')," +
+            "(select count(d) from Department d where d.departmentType = 'DEV_OPS')" +
+            ") from Department d")
+    Set<DepartmentFullTypeOverview> findDepartmentFullTypeOverview();
 }
