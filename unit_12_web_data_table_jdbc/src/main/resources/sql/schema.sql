@@ -45,7 +45,7 @@ create table author_book
     author_id bigint not null,
     book_id   bigint not null,
     primary key (author_id, book_id),
-    foreign key (author_id) references authors (id),
+    foreign key (author_id) references authors (id) on delete cascade,
     foreign key (book_id) references books (id)
 );
 
