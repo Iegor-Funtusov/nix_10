@@ -22,6 +22,7 @@
         <module>unit_9_generics_date</module>
         <module>demo_web</module>
         <module>unit_10_ionio</module>
+        <module>unit_17_start_web</module>
     </modules>
     <packaging>pom</packaging>
 
