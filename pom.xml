@@ -23,6 +23,7 @@
         <module>demo_web</module>
         <module>unit_10_ionio</module>
         <module>unit_17_start_web</module>
+        <module>unit_18_clean_spring</module>
     </modules>
     <packaging>pom</packaging>
 
