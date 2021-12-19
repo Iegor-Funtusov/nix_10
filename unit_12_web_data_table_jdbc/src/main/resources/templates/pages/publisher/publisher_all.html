@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragments/data_table}">
+<head>
+    <meta charset="utf-8">
+    <title>publishers</title>
+</head>
+<body>
+
+<div layout:fragment="data_table_content">
+
+    <tr th:each="publisher,iter : ${pageData.getItems()}">
+        <td th:text="${iter.count}"></td>
+        <td th:text="${publisher.getName()}"></td>
+        <td th:text="${publisher.getCountry()}"></td>
+        <td th:text="${publisher.getBookCount()}"></td>
+        <td>
+            <a th:href="@{'/publishers/details/' + ${publisher.getId()}}" type="button" class="btn btn-primary">details</a>
+        </td>
+        <td>
+            <a th:href="@{'/publishers/delete/' + ${publisher.getId()}}" type="button" class="btn btn-danger">delete</a>
+        </td>
+    </tr>
+
+</div>
+
+</body>
+</html>
