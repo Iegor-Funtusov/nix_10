@@ -19,6 +19,7 @@
         <module>unit_6_di_oop</module>
         <module>dinix</module>
         <module>unit_7_collections</module>
+        <module>unit_8_exception</module>
     </modules>
     <packaging>pom</packaging>
 
