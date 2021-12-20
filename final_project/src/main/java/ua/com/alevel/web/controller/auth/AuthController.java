@@ -6,6 +6,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+
 import ua.com.alevel.config.security.SecurityService;
 import ua.com.alevel.facade.AuthValidatorFacade;
 import ua.com.alevel.facade.RegistrationFacade;
@@ -28,16 +29,6 @@ public class AuthController extends AbstractController {
         this.registrationFacade = registrationFacade;
         this.authValidatorFacade = authValidatorFacade;
         this.securityService = securityService;
-    }
-
-    @GetMapping("/")
-    public String main(Model model) {
-        return redirectProcess(model);
-    }
-
-    @GetMapping("/open")
-    public String open(Model model) {
-        return "pages/open/open";
     }
 
     @GetMapping("/login")
