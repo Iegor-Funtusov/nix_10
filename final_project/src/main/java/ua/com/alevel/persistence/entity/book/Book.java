@@ -44,15 +44,21 @@ public class Book extends BaseEntity {
 
     private Integer quantity;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Publisher publisher;
 
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "books")
     private Set<Author> authors;
 
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "books")
+    private Set<Genre> genres;
+
     public Book() {
         super();
-        authors = new HashSet<>();
+        this.authors = new HashSet<>();
+        this.genres = new HashSet<>();
+        this.price = new BigDecimal("00.00");
+        this.quantity = 0;
     }
 
     public String getBookName() {
@@ -125,5 +131,13 @@ public class Book extends BaseEntity {
 
     public void setQuantity(Integer quantity) {
         this.quantity = quantity;
+    }
+
+    public Set<Genre> getGenres() {
+        return genres;
+    }
+
+    public void setGenres(Set<Genre> genres) {
+        this.genres = genres;
     }
 }
