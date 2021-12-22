@@ -2,9 +2,6 @@ package ua.com.alevel.service.impl;
 
 import org.springframework.stereotype.Service;
 
-import ua.com.alevel.logger.InjectLog;
-import ua.com.alevel.logger.LoggerLevel;
-import ua.com.alevel.logger.LoggerService;
 import ua.com.alevel.persistence.entity.book.Book;
 import ua.com.alevel.persistence.entity.publisher.Publisher;
 import ua.com.alevel.persistence.repository.book.BookRepository;
@@ -18,9 +15,6 @@ import java.util.Optional;
 
 @Service
 public class PLPServiceImpl implements PLPService {
-
-    @InjectLog
-    private LoggerService loggerService;
 
     private final BookRepository bookRepository;
     private final PublisherRepository publisherRepository;
@@ -38,7 +32,6 @@ public class PLPServiceImpl implements PLPService {
             Long publisherId = (Long) queryMap.get(WebUtil.PUBLISHER_PARAM);
             Optional<Publisher> publisher = publisherRepository.findById(publisherId);
             if (publisher.isPresent()) {
-                loggerService.commit(LoggerLevel.INFO, WebUtil.PUBLISHER_PARAM + " : " + publisherId);
                 return bookRepository.findByPublisher(publisher.get());
             }
         }
