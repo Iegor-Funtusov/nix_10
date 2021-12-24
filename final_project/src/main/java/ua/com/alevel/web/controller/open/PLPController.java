@@ -9,11 +9,11 @@ import ua.com.alevel.facade.PLPFacade;
 
 @Controller
 @RequestMapping("/books")
-public class OpenBookController {
+public class PLPController {
 
     private final PLPFacade plpFacade;
 
-    public OpenBookController(PLPFacade plpFacade) {
+    public PLPController(PLPFacade plpFacade) {
         this.plpFacade = plpFacade;
     }
 
