@@ -1,7 +1,9 @@
 package ua.com.alevel.facade.impl;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.request.WebRequest;
+import ua.com.alevel.exception.BadRequestException;
 import ua.com.alevel.facade.PLPFacade;
 import ua.com.alevel.logger.InjectLog;
 import ua.com.alevel.logger.LoggerLevel;
@@ -32,6 +34,9 @@ public class PLPFacadeImpl implements PLPFacade {
         Map<String, Object> queryMap = new HashMap<>();
         if (webRequest.getParameterMap().get(WebUtil.PUBLISHER_PARAM) != null) {
             String[] params = webRequest.getParameterMap().get(WebUtil.PUBLISHER_PARAM);
+            if (StringUtils.isBlank(params[0])) {
+                throw new BadRequestException("bad request");
+            }
             Long publisherId = Long.parseLong(params[0]);
             queryMap.put(WebUtil.PUBLISHER_PARAM, publisherId);
             loggerService.commit(LoggerLevel.INFO, "add " + WebUtil.PUBLISHER_PARAM + ": " + publisherId);
