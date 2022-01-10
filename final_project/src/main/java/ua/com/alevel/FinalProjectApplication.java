@@ -7,10 +7,14 @@ import org.springframework.boot.autoconfigure.jdbc.DataSourceTransactionManagerA
 import org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfiguration;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
+import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+import ua.com.alevel.elastic.document.BookIndex;
 import ua.com.alevel.persistence.entity.user.Admin;
 import ua.com.alevel.persistence.repository.user.AdminRepository;
+
+import javax.annotation.PreDestroy;
 
 @SpringBootApplication(exclude = {
         DataSourceAutoConfiguration.class,
@@ -20,10 +24,12 @@ public class FinalProjectApplication {
 
     private final BCryptPasswordEncoder encoder;
     private final AdminRepository adminRepository;
+    private final ElasticsearchOperations elasticsearchOperations;
 
-    public FinalProjectApplication(BCryptPasswordEncoder encoder, AdminRepository adminRepository) {
+    public FinalProjectApplication(BCryptPasswordEncoder encoder, AdminRepository adminRepository, ElasticsearchOperations elasticsearchOperations) {
         this.encoder = encoder;
         this.adminRepository = adminRepository;
+        this.elasticsearchOperations = elasticsearchOperations;
     }
 
     public static void main(String[] args) {
@@ -39,5 +45,10 @@ public class FinalProjectApplication {
             admin.setPassword(encoder.encode("rootroot"));
             adminRepository.save(admin);
         }
+    }
+
+    @PreDestroy
+    public void resetElastic() {
+        elasticsearchOperations.indexOps(BookIndex.class).delete();
     }
 }

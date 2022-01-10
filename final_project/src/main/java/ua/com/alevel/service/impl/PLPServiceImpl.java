@@ -40,6 +40,10 @@ public class PLPServiceImpl implements PLPService {
             Optional<Publisher> publisher = crudRepositoryHelper.findById(publisherRepository, publisherId);
             return bookRepository.findByPublisher(publisher.get());
         }
+        if (queryMap.get(WebUtil.SEARCH_BOOK_PARAM) != null) {
+            String searchBook = (String) queryMap.get(WebUtil.SEARCH_BOOK_PARAM);
+            return bookRepository.findByBookNameContaining(searchBook);
+        }
         return bookRepository.findAll();
     }
 }

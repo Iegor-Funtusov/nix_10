@@ -9,4 +9,5 @@ import java.util.List;
 public interface PLPFacade {
 
     List<BookPLPDto> search(WebRequest webRequest);
+    List<String> searchBookName(String query);
 }
