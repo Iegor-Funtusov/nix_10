@@ -25,6 +25,7 @@
         <module>unit_10_ionio</module>
         <module>unit_17_start_web</module>
         <module>unit_18_clean_spring</module>
+        <module>unit_19_thread</module>
     </modules>
     <packaging>pom</packaging>
 
