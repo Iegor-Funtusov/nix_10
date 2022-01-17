@@ -4,12 +4,11 @@ public class SumThread extends Thread {
 
     private Long[] longs;
     private Long sum = 0L;
-    private boolean isDone;
 
     @Override
     public void run() {
         sum = MathUtil.sum(longs);
-        isDone = true;
+        this.interrupt();
     }
 
     public void setLongs(Long[] longs) {
@@ -18,9 +17,5 @@ public class SumThread extends Thread {
 
     public Long getSum() {
         return sum;
-    }
-
-    public boolean isDone() {
-        return isDone;
     }
 }
