@@ -35,8 +35,6 @@ public class ProgramRun {
             case "2" -> incorrectStopThread();
             case "3" -> simpleSum();
             case "4" -> complexSum();
-            case "5" -> executor();
-            case "6" -> callable();
         }
     }
 
@@ -150,51 +148,4 @@ public class ProgramRun {
 //        System.out.println("ProgramRun.async");
 //        return 888;
 //    }
-
-    private static void executor() {
-        CustomExecutorService executorService = new CustomExecutorService();
-        executorService.test();
-    }
-
-    private static void callable() {
-        System.out.println("ProgramRun.callable");
-        List<Long[]> list = MathUtil.divideArray(longs);
-        List<ThreadCallable> callables = new ArrayList<>();
-        for (Long[] longs1 : list) {
-            ThreadCallable threadCallable = new ThreadCallable();
-            threadCallable.setLongs(longs1);
-            threadCallable.call();
-            callables.add(threadCallable);
-        }
-
-        long sum = 0L;
-        for (ThreadCallable callable : callables) {
-            sum += callable.getSum();
-        }
-        System.out.println("sum = " + sum);
-    }
-
-    private void other() {
-        ExecutorService executor = Executors.newFixedThreadPool(1);
-        Future<Long> future = executor.submit(() -> {
-            try {
-                return MathUtil.sum(longs);
-            }
-            catch (Exception e) {
-                throw new IllegalStateException("task interrupted", e);
-            }
-        });
-
-        System.out.println("future done? " + future.isDone());
-
-        Long result = null;
-        try {
-            result = future.get();
-        } catch (InterruptedException | ExecutionException e) {
-            e.printStackTrace();
-        }
-
-        System.out.println("future done? " + future.isDone());
-        System.out.print("result: " + result);
-    }
 }
