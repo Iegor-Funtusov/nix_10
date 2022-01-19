@@ -232,53 +232,33 @@ public class ProgramRun {
             listNew.addAll(MathUtil.divideArray(longs1));
         }
         Long sum = 0L;
+        ExecutorService executorService = Executors.newFixedThreadPool(listNew.size());
+        List<Future<Long>> futures = new ArrayList<>();
         long start = System.currentTimeMillis();
 
-//        CompletableFuture<Long> future = new CompletableFuture<>();
         for (Long[] longs1 : listNew) {
             System.out.println("next iter");
 
-//            CompletableFuture<Long> completableFuture
-//                    = CompletableFuture.supplyAsync(() -> MathUtil.sum(longs1));
-//
-//            future.thenApply(l -> {
-//                try {
-//                    return l + completableFuture.get();
-//                } catch (InterruptedException | ExecutionException e) {
-//                    e.printStackTrace();
-//                }
-//                return 0;
-//            });
-
-            Callable<Long> callable = () -> MathUtil.sum(longs1);
-            FutureTask<Long> futureTask = new FutureTask<>(callable);
-            new Thread(futureTask).start();
-
-//            FutureTask<Long> futureTask = new FutureTask<>(() -> MathUtil.sum(longs1));
-//            new Thread(futureTask).start();
-
-//            Callable<Long> callable = new Callable<Long>() {
-//                @Override
-//                public Long call() throws Exception {
-//                    return MathUtil.sum(longs1);
-//                }
-//            };
-//            FutureTask<Long> futureTask = new FutureTask<>(callable);
-//            new Thread(futureTask).start();
-
-
-            try {
-                sum += futureTask.get();
-            } catch (InterruptedException | ExecutionException e) {
-                e.printStackTrace();
-            }
+            Callable<Long> callable = () -> {
+                Thread.sleep(2000);
+                return MathUtil.sum(longs1);
+            };
+            Future<Long> future = executorService.submit(callable);
+            futures.add(future);
         }
 
-//        try {
-//            sum = future.get();
-//        } catch (InterruptedException | ExecutionException e) {
-//            e.printStackTrace();
-//        }
+        while (true) {
+            if (futures.stream().allMatch(Future::isDone)) {
+                for (Future<Long> future : futures) {
+                    try {
+                        sum += future.get();
+                    } catch (InterruptedException | ExecutionException e) {
+                        e.printStackTrace();
+                    }
+                }
+                break;
+            }
+        }
 
         long end = System.currentTimeMillis() - start;
         System.out.println("sum: " + sum);
