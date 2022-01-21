@@ -65,6 +65,11 @@
         </encoder>
     </appender>
 
+<!--    <logger name="org.springframework.mail.SimpleMailMessage">-->
+<!--        <level value="trace"/>-->
+<!--        <appender-ref ref="console"/>-->
+<!--    </logger>-->
+
     <logger name="info" level="info" additivity="false">
         <appender-ref ref="info"/>
     </logger>
